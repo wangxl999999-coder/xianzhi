@@ -1,0 +1,144 @@
+<view class="page">
+  <swiper class="image-swiper" indicator-dots="true" indicator-color="rgba(255,255,255,0.5)" indicator-active-color="#ff6b6b" autoplay="false">
+    <swiper-item wx:for="{{item.images}}" wx:key="*this">
+      <image class="item-image" src="{{item}}" mode="aspectFill" bindtap="previewImage" data-url="{{item}}"></image>
+    </swiper-item>
+    <swiper-item wx:if="{{!item.images || item.images.length === 0}}">
+      <image class="item-image" src="{{defaultImage}}" mode="aspectFill"></image>
+    </swiper-item>
+  </swiper>
+
+  <view class="info-section">
+    <view class="price-row">
+      <text class="current-price">¥{{item.price}}</text>
+      <text class="original-price" wx:if="{{item.original_price}}">原价 ¥{{item.original_price}}</text>
+      <view class="favorite-btn {{isFavorite ? 'active' : ''}}" bindtap="toggleFavorite">
+        <text class="favorite-icon">{{isFavorite ? '❤' : '🤍'}}</text>
+        <text class="favorite-text">{{isFavorite ? '已收藏' : '收藏'}}</text>
+      </view>
+    </view>
+
+    <view class="title-row">
+      <text class="item-title">{{item.title}}</text>
+    </view>
+
+    <view class="tag-row">
+      <text class="tag tag-info" wx:if="{{item.condition}}">{{item.condition}}</text>
+      <text class="tag tag-primary" wx:if="{{item.category_name}}">{{item.category_name}}</text>
+      <text class="tag tag-warning" wx:if="{{item.pickup_method}}">{{item.pickup_method}}</text>
+    </view>
+
+    <view class="meta-row">
+      <view class="meta-item">
+        <text class="meta-icon">👁</text>
+        <text class="meta-text">{{item.views}} 浏览</text>
+      </view>
+      <view class="meta-item">
+        <text class="meta-icon">❤</text>
+        <text class="meta-text">{{item.favorites_count}} 收藏</text>
+      </view>
+      <view class="meta-item">
+        <text class="meta-icon">📅</text>
+        <text class="meta-text">{{formatTime(item.created_at)}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="section divider-section">
+    <view class="divider-line"></view>
+  </view>
+
+  <view class="publisher-section">
+    <view class="publisher-header" bindtap="goToPublisherItems" data-id="{{item.publisher_id}}">
+      <view class="publisher-avatar">
+        <image src="{{item.publisher_avatar || defaultAvatar}}" mode="aspectFill"></image>
+      </view>
+      <view class="publisher-info">
+        <text class="publisher-name">{{item.publisher_nickname}}</text>
+        <text class="publisher-time">注册于 {{formatDate(item.publisher_created_at)}}</text>
+      </view>
+      <text class="publisher-arrow">></text>
+    </view>
+
+    <view class="publisher-contact" wx:if="{{item.publisher_phone || item.publisher_wechat}}">
+      <view class="contact-item" wx:if="{{item.publisher_phone}}" bindtap="makePhoneCall" data-phone="{{item.publisher_phone}}">
+        <text class="contact-icon">📞</text>
+        <view class="contact-info">
+          <text class="contact-label">电话</text>
+          <text class="contact-value">{{item.publisher_phone}}</text>
+        </view>
+      </view>
+      <view class="contact-item" wx:if="{{item.publisher_wechat}}">
+        <text class="contact-icon">💬</text>
+        <view class="contact-info">
+          <text class="contact-label">微信</text>
+          <text class="contact-value">{{item.publisher_wechat}}</text>
+        </view>
+        <view class="copy-btn" bindtap="copyWechat" data-wechat="{{item.publisher_wechat}}">复制</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="section divider-section">
+    <view class="divider-line"></view>
+  </view>
+
+  <view class="desc-section" wx:if="{{item.description}}">
+    <view class="section-title">商品描述</view>
+    <view class="desc-content">
+      <text class="desc-text">{{item.description}}</text>
+    </view>
+  </view>
+
+  <view class="location-section" wx:if="{{item.address}}">
+    <view class="section-title">取货位置</view>
+    <view class="location-content">
+      <text class="location-icon">📍</text>
+      <text class="location-text">{{item.address}}</text>
+      <text class="location-distance" wx:if="{{item.distance}}">{{item.distance.toFixed(1)}}km</text>
+    </view>
+  </view>
+
+  <view class="section divider-section">
+    <view class="divider-line"></view>
+  </view>
+
+  <view class="other-items-section" wx:if="{{otherItems.length > 0}}">
+    <view class="section-title">卖家其他闲置</view>
+    <view class="other-items-list">
+      <view class="other-item-card" wx:for="{{otherItems}}" wx:key="id" bindtap="goToDetail" data-id="{{item.id}}">
+        <view class="other-item-image">
+          <image src="{{item.images && item.images.length > 0 ? item.images[0] : defaultImage}}" mode="aspectFill"></image>
+        </view>
+        <view class="other-item-info">
+          <text class="other-item-title">{{item.title}}</text>
+          <text class="other-item-price">¥{{item.price}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="bottom-bar safe-bottom">
+    <view class="bar-left">
+      <view class="bar-action" bindtap="goToHome">
+        <text class="bar-icon">🏠</text>
+        <text class="bar-text">首页</text>
+      </view>
+      <view class="bar-action" bindtap="goToList">
+        <text class="bar-icon">📋</text>
+        <text class="bar-text">列表</text>
+      </view>
+    </view>
+    <view class="bar-right">
+      <view class="bar-btn chat-btn" bindtap="contactSeller" wx:if="{{item.publisher_id && item.publisher_id !== currentUserId}}">
+        <text class="btn-text">私信卖家</text>
+      </view>
+      <view class="bar-btn phone-btn" bindtap="makePhoneCall" data-phone="{{item.publisher_phone}}" wx:if="{{item.publisher_phone && item.publisher_id !== currentUserId}}">
+        <text class="btn-icon">📞</text>
+        <text class="btn-text">联系卖家</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="bottom-placeholder" wx:if="{{item.publisher_phone || item.publisher_id}}"></view>
+</view>

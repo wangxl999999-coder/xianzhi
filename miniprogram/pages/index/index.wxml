@@ -1,0 +1,69 @@
+<view class="page">
+  <view class="search-bar" bindtap="goToSearch">
+    <view class="search-input">
+      <text class="search-icon">🔍</text>
+      <text class="search-placeholder">搜索闲置品</text>
+    </view>
+  </view>
+
+  <view class="banner-section" wx:if="{{banners.length > 0}}">
+    <swiper class="banner-swiper" indicator-dots="true" autoplay="true" interval="3000" duration="500" circular="true">
+      <swiper-item wx:for="{{banners}}" wx:key="id">
+        <image class="banner-image" src="{{item.image_url}}" mode="aspectFill" lazy-load="true"></image>
+      </swiper-item>
+    </swiper>
+  </view>
+
+  <view class="category-section">
+    <view class="section-header">
+      <text class="section-title">分类</text>
+      <text class="section-more" bindtap="goToList">全部 ></text>
+    </view>
+    <view class="category-grid">
+      <view class="category-item" wx:for="{{categories}}" wx:key="id" bindtap="goToCategory" data-id="{{item.id}}" data-name="{{item.name}}">
+        <view class="category-icon">
+          <image src="{{item.icon || defaultCategoryIcon}}" mode="aspectFit"></image>
+        </view>
+        <text class="category-name">{{item.name}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="items-section">
+    <view class="section-header">
+      <text class="section-title">最新闲置</text>
+      <text class="section-more" bindtap="goToList">查看全部 ></text>
+    </view>
+
+    <view class="items-grid">
+      <view class="item-card" wx:for="{{items}}" wx:key="id" bindtap="goToDetail" data-id="{{item.id}}">
+        <view class="item-image-wrapper">
+          <image class="item-image" src="{{item.images && item.images.length > 0 ? item.images[0] : defaultImage}}" mode="aspectFill" lazy-load="true"></image>
+          <view class="item-condition" wx:if="{{item.condition}}">
+            <text class="condition-text">{{item.condition}}</text>
+          </view>
+        </view>
+        <view class="item-info">
+          <text class="item-title">{{item.title}}</text>
+          <view class="item-bottom">
+            <view class="price-wrapper">
+              <text class="item-price">¥{{item.price}}</text>
+              <text class="item-original" wx:if="{{item.original_price}}">¥{{item.original_price}}</text>
+            </view>
+            <view class="item-location" wx:if="{{item.distance}}">
+              <text class="distance-text">{{item.distance.toFixed(1)}}km</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="empty-state" wx:if="{{items.length === 0 && !loading}}">
+      <text>暂无闲置品</text>
+    </view>
+
+    <view class="loading" wx:if="{{loading}}">
+      <text>加载中...</text>
+    </view>
+  </view>
+</view>

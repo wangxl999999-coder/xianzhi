@@ -1,0 +1,50 @@
+<view class="page">
+  <view class="filter-tabs">
+    <view class="filter-tab {{currentStatus === '' ? 'active' : ''}}" bindtap="onStatusChange" data-status="">全部</view>
+    <view class="filter-tab {{currentStatus === '1' ? 'active' : ''}}" bindtap="onStatusChange" data-status="1">在售</view>
+    <view class="filter-tab {{currentStatus === '2' ? 'active' : ''}}" bindtap="onStatusChange" data-status="2">已售出</view>
+    <view class="filter-tab {{currentStatus === '3' ? 'active' : ''}}" bindtap="onStatusChange" data-status="3">已下架</view>
+  </view>
+
+  <view class="items-list" wx:if="{{items.length > 0}}">
+    <view class="item-card" wx:for="{{items}}" wx:key="id">
+      <view class="item-left" bindtap="goToDetail" data-id="{{item.id}}">
+        <image class="item-image" src="{{item.images && item.images.length > 0 ? item.images[0] : defaultImage}}" mode="aspectFill"></image>
+      </view>
+      <view class="item-right" bindtap="goToDetail" data-id="{{item.id}}">
+        <view class="item-title">{{item.title}}</view>
+        <view class="item-price-row">
+          <text class="item-price">¥{{item.price}}</text>
+          <view class="status-tag {{getStatusClass(item.status)}}">{{getStatusText(item.status)}}</view>
+        </view>
+        <view class="item-meta">
+          <text class="meta-text">{{item.views}}浏览</text>
+          <text class="meta-text">{{item.favorites_count}}收藏</text>
+          <text class="meta-text">{{formatTime(item.created_at)}}</text>
+        </view>
+      </view>
+      <view class="item-actions">
+        <view class="action-btn" wx:if="{{item.status === 1}}" bindtap="toggleStatus" data-id="{{item.id}}" data-status="3" data-action="下架">下架</view>
+        <view class="action-btn" wx:if="{{item.status === 3}}" bindtap="toggleStatus" data-id="{{item.id}}" data-status="1" data-action="上架">上架</view>
+        <view class="action-btn primary" wx:if="{{item.status === 1}}" bindtap="markSold" data-id="{{item.id}}">已售出</view>
+        <view class="action-btn danger" bindtap="deleteItem" data-id="{{item.id}}">删除</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="empty-state" wx:if="{{items.length === 0 && !loading}}">
+    <view class="empty-icon">📦</view>
+    <text class="empty-text">暂无发布的闲置品</text>
+    <view class="empty-btn" bindtap="goToPublish">
+      <text class="btn-text">去发布</text>
+    </view>
+  </view>
+
+  <view class="loading" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+
+  <view class="no-more" wx:if="{{!loading && !hasMore && items.length > 0}}">
+    <text>没有更多了</text>
+  </view>
+</view>

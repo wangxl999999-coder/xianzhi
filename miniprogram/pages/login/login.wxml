@@ -1,0 +1,63 @@
+<view class="page">
+  <view class="logo-section">
+    <view class="logo-icon">
+      <text class="logo-text">闲置</text>
+    </view>
+    <text class="logo-desc">本地社区闲置交易平台</text>
+  </view>
+
+  <view class="form-section">
+    <view class="input-group">
+      <view class="input-item">
+        <text class="input-icon">👤</text>
+        <input class="input-field" placeholder="请输入用户名" value="{{username}}" bindinput="onUsernameInput" />
+      </view>
+      <view class="input-item">
+        <text class="input-icon">🔒</text>
+        <input class="input-field" placeholder="请输入密码" password="true" value="{{password}}" bindinput="onPasswordInput" />
+      </view>
+    </view>
+
+    <view class="action-group">
+      <view class="submit-btn {{canLogin ? '' : 'disabled'}}" bindtap="handleLogin">
+        <text class="btn-text">登录</text>
+      </view>
+      <view class="register-link" bindtap="goToRegister">
+        <text>还没有账号？</text>
+        <text class="link-text">立即注册</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="demo-section" wx:if="{{!isLoggedIn}}">
+    <view class="demo-header">
+      <text class="demo-title">测试账号</text>
+    </view>
+    <view class="demo-content">
+      <view class="demo-item">
+        <text class="demo-label">用户名：</text>
+        <text class="demo-value" bindtap="copyDemoAccount" data-account="test1">test1</text>
+      </view>
+      <view class="demo-item">
+        <text class="demo-label">密码：</text>
+        <text class="demo-value" bindtap="copyDemoPassword">123456</text>
+      </view>
+    </view>
+    <view class="demo-tip">
+      <text>点击用户名或密码可快速复制</text>
+    </view>
+  </view>
+
+  <view class="logged-section" wx:if="{{isLoggedIn}}">
+    <view class="logged-icon">✓</view>
+    <text class="logged-text">您已登录</text>
+    <view class="logged-actions">
+      <view class="logged-btn" bindtap="goToHome">
+        <text class="btn-text">返回首页</text>
+      </view>
+      <view class="logged-btn outline" bindtap="handleLogout">
+        <text class="btn-text">退出登录</text>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,42 @@
+<view class="page">
+  <view class="items-list" wx:if="{{items.length > 0}}">
+    <view class="item-card" wx:for="{{items}}" wx:key="id">
+      <view class="item-left" bindtap="goToDetail" data-id="{{item.id}}">
+        <image class="item-image" src="{{item.images && item.images.length > 0 ? item.images[0] : defaultImage}}" mode="aspectFill"></image>
+      </view>
+      <view class="item-right" bindtap="goToDetail" data-id="{{item.id}}">
+        <view class="item-title">{{item.title}}</view>
+        <view class="item-price-row">
+          <text class="item-price">¥{{item.price}}</text>
+          <view class="seller-info">
+            <text class="seller-name">{{item.publisher_nickname}}</text>
+          </view>
+        </view>
+        <view class="item-meta">
+          <text class="meta-text" wx:if="{{item.distance}}">{{item.distance.toFixed(1)}}km</text>
+          <text class="meta-text">{{item.views}}浏览</text>
+          <text class="meta-text">{{formatTime(item.favorite_time)}}</text>
+        </view>
+      </view>
+      <view class="item-actions">
+        <view class="action-btn danger" bindtap="cancelFavorite" data-id="{{item.id}}" data-index="{{index}}">取消收藏</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="empty-state" wx:if="{{items.length === 0 && !loading}}">
+    <view class="empty-icon">❤</view>
+    <text class="empty-text">暂无收藏的闲置品</text>
+    <view class="empty-btn" bindtap="goToList">
+      <text class="btn-text">去逛逛</text>
+    </view>
+  </view>
+
+  <view class="loading" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+
+  <view class="no-more" wx:if="{{!loading && !hasMore && items.length > 0}}">
+    <text>没有更多了</text>
+  </view>
+</view>
