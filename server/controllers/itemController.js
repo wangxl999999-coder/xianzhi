@@ -201,7 +201,22 @@ const createItem = async (req, res) => {
       `INSERT INTO items 
        (user_id, title, description, price, original_price, \`condition\`, category_id, pickup_method, phone, wechat, images, address, latitude, longitude)
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [userId, title, description, price, originalPrice, condition, categoryId, pickupMethod, phone, wechat, JSON.stringify(images || []), address, latitude, longitude]
+      [
+        userId, 
+        title, 
+        description, 
+        price, 
+        originalPrice ?? null, 
+        condition ?? null, 
+        categoryId ?? null, 
+        pickupMethod ?? null, 
+        phone ?? null, 
+        wechat ?? null, 
+        JSON.stringify(images || []), 
+        address ?? null, 
+        latitude ?? null, 
+        longitude ?? null
+      ]
     );
 
     res.status(201).json({
