@@ -1,0 +1,143 @@
+<view class="page">
+  <view class="search-box">
+    <view class="search-input-wrapper">
+      <text class="search-icon">🔍</text>
+      <input class="search-input" placeholder="搜索闲置品" value="{{keyword}}" bindinput="onKeywordInput" bindconfirm="onSearch" />
+      <text class="clear-btn" wx:if="{{keyword}}" bindtap="clearKeyword">✕</text>
+    </view>
+    <text class="search-btn" bindtap="onSearch">搜索</text>
+  </view>
+
+  <view class="filter-section">
+    <view class="filter-tabs">
+      <view class="filter-tab {{sortBy === 'newest' ? 'active' : ''}}" bindtap="onSortChange" data-sort="newest">最新</view>
+      <view class="filter-tab {{sortBy === 'price_asc' ? 'active' : ''}}" bindtap="onSortChange" data-sort="price_asc">价格↑</view>
+      <view class="filter-tab {{sortBy === 'price_desc' ? 'active' : ''}}" bindtap="onSortChange" data-sort="price_desc">价格↓</view>
+      <view class="filter-tab {{sortBy === 'distance' ? 'active' : ''}}" bindtap="onSortChange" data-sort="distance">距离</view>
+    </view>
+
+    <view class="filter-bar">
+      <view class="filter-item {{showCategoryFilter ? 'active' : ''}}" bindtap="toggleCategoryFilter">
+        <text>{{currentCategoryName || '分类'}}</text>
+        <text class="filter-arrow">▼</text>
+      </view>
+      <view class="filter-item {{showConditionFilter ? 'active' : ''}}" bindtap="toggleConditionFilter">
+        <text>{{currentCondition || '成色'}}</text>
+        <text class="filter-arrow">▼</text>
+      </view>
+      <view class="filter-item" bindtap="showPriceFilterPopup">
+        <text>价格</text>
+        <text class="filter-arrow">▼</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="category-filter-popup" wx:if="{{showCategoryFilter}}">
+    <view class="popup-mask" bindtap="toggleCategoryFilter"></view>
+    <view class="popup-content">
+      <view class="popup-header">
+        <text class="popup-title">选择分类</text>
+        <text class="popup-close" bindtap="toggleCategoryFilter">✕</text>
+      </view>
+      <scroll-view class="popup-scroll" scroll-y>
+        <view class="category-options">
+          <view class="category-option {{!currentCategoryId ? 'active' : ''}}" bindtap="onCategorySelect" data-id="">全部</view>
+          <view class="category-option {{currentCategoryId === item.id ? 'active' : ''}}" wx:for="{{categories}}" wx:key="id" bindtap="onCategorySelect" data-id="{{item.id}}" data-name="{{item.name}}">{{item.name}}</view>
+        </view>
+      </scroll-view>
+      <view class="popup-footer">
+        <view class="popup-btn confirm" bindtap="confirmCategoryFilter">确定</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="condition-filter-popup" wx:if="{{showConditionFilter}}">
+    <view class="popup-mask" bindtap="toggleConditionFilter"></view>
+    <view class="popup-content">
+      <view class="popup-header">
+        <text class="popup-title">选择成色</text>
+        <text class="popup-close" bindtap="toggleConditionFilter">✕</text>
+      </view>
+      <view class="condition-options">
+        <view class="condition-option {{!currentCondition ? 'active' : ''}}" bindtap="onConditionSelect" data-value="">全部</view>
+        <view class="condition-option {{currentCondition === '全新' ? 'active' : ''}}" bindtap="onConditionSelect" data-value="全新">全新</view>
+        <view class="condition-option {{currentCondition === '几乎全新' ? 'active' : ''}}" bindtap="onConditionSelect" data-value="几乎全新">几乎全新</view>
+        <view class="condition-option {{currentCondition === '轻微使用' ? 'active' : ''}}" bindtap="onConditionSelect" data-value="轻微使用">轻微使用</view>
+        <view class="condition-option {{currentCondition === '明显使用' ? 'active' : ''}}" bindtap="onConditionSelect" data-value="明显使用">明显使用</view>
+      </view>
+      <view class="popup-footer">
+        <view class="popup-btn confirm" bindtap="confirmConditionFilter">确定</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="price-filter-popup" wx:if="{{showPriceFilter}}">
+    <view class="popup-mask" bindtap="hidePriceFilterPopup"></view>
+    <view class="popup-content">
+      <view class="popup-header">
+        <text class="popup-title">价格区间</text>
+        <text class="popup-close" bindtap="hidePriceFilterPopup">✕</text>
+      </view>
+      <view class="price-inputs">
+        <view class="price-input-wrapper">
+          <text class="price-prefix">¥</text>
+          <input class="price-input" type="digit" placeholder="最低价" value="{{minPrice}}" bindinput="onMinPriceInput" />
+        </view>
+        <text class="price-separator">—</text>
+        <view class="price-input-wrapper">
+          <text class="price-prefix">¥</text>
+          <input class="price-input" type="digit" placeholder="最高价" value="{{maxPrice}}" bindinput="onMaxPriceInput" />
+        </view>
+      </view>
+      <view class="price-quick">
+        <view class="quick-item {{minPrice === '' && maxPrice === '' ? 'active' : ''}}" bindtap="onPriceQuickSelect" data-min="" data-max="">不限</view>
+        <view class="quick-item {{minPrice === '0' && maxPrice === '100' ? 'active' : ''}}" bindtap="onPriceQuickSelect" data-min="0" data-max="100">100以下</view>
+        <view class="quick-item {{minPrice === '100' && maxPrice === '500' ? 'active' : ''}}" bindtap="onPriceQuickSelect" data-min="100" data-max="500">100-500</view>
+        <view class="quick-item {{minPrice === '500' && maxPrice === '1000' ? 'active' : ''}}" bindtap="onPriceQuickSelect" data-min="500" data-max="1000">500-1000</view>
+        <view class="quick-item {{minPrice === '1000' && maxPrice === '' ? 'active' : ''}}" bindtap="onPriceQuickSelect" data-min="1000" data-max="">1000以上</view>
+      </view>
+      <view class="popup-footer">
+        <view class="popup-btn reset" bindtap="resetPriceFilter">重置</view>
+        <view class="popup-btn confirm" bindtap="confirmPriceFilter">确定</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="items-list">
+    <view class="item-card" wx:for="{{items}}" wx:key="id" bindtap="goToDetail" data-id="{{item.id}}">
+      <view class="item-left">
+        <image class="item-image" src="{{item.images && item.images.length > 0 ? item.images[0] : defaultImage}}" mode="aspectFill" lazy-load="true"></image>
+      </view>
+      <view class="item-right">
+        <view class="item-title">{{item.title}}</view>
+        <view class="item-desc" wx:if="{{item.description}}">{{item.description}}</view>
+        <view class="item-tags" wx:if="{{item.condition}}">
+          <text class="tag tag-info">{{item.condition}}</text>
+          <text class="tag tag-primary" wx:if="{{item.category_name}}">{{item.category_name}}</text>
+        </view>
+        <view class="item-bottom">
+          <view class="price-wrapper">
+            <text class="item-price">¥{{item.price}}</text>
+            <text class="item-original" wx:if="{{item.original_price}}">¥{{item.original_price}}</text>
+          </view>
+          <view class="item-meta">
+            <text class="meta-text" wx:if="{{item.distance}}">{{item.distance.toFixed(1)}}km</text>
+            <text class="meta-text">{{item.views}}浏览</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="empty-state" wx:if="{{items.length === 0 && !loading}}">
+      <text>暂无相关闲置品</text>
+    </view>
+
+    <view class="loading" wx:if="{{loading}}">
+      <text>加载中...</text>
+    </view>
+
+    <view class="no-more" wx:if="{{!loading && !hasMore && items.length > 0}}">
+      <text>没有更多了</text>
+    </view>
+  </view>
+</view>

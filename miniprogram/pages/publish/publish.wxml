@@ -1,0 +1,148 @@
+<view class="page safe-bottom">
+  <view class="form-section">
+    <view class="form-item">
+      <view class="form-label">
+        <text class="required">*</text>
+        <text>商品图片</text>
+        <text class="tip">最多9张</text>
+      </view>
+      <view class="upload-area">
+        <view class="upload-item" wx:for="{{images}}" wx:key="index">
+          <image class="upload-image" src="{{item}}" mode="aspectFill" bindtap="previewImage" data-url="{{item}}" data-index="{{index}}"></image>
+          <view class="delete-btn" bindtap="deleteImage" data-index="{{index}}">×</view>
+        </view>
+        <view class="upload-btn" wx:if="{{images.length < 9}}" bindtap="chooseImage">
+          <text class="upload-icon">+</text>
+          <text class="upload-text">添加图片</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="form-item">
+      <view class="form-label">
+        <text class="required">*</text>
+        <text>商品标题</text>
+      </view>
+      <view class="form-input-wrapper">
+        <input class="form-input" placeholder="请输入商品标题（最多50字）" value="{{title}}" bindinput="onTitleInput" maxlength="50" />
+        <text class="char-count">{{title.length}}/50</text>
+      </view>
+    </view>
+
+    <view class="form-item">
+      <view class="form-label">
+        <text>商品描述</text>
+      </view>
+      <view class="form-textarea-wrapper">
+        <textarea class="form-textarea" placeholder="请输入商品描述，详细的描述更容易卖出哦（最多2000字）" value="{{description}}" bindinput="onDescriptionInput" maxlength="2000" />
+        <text class="char-count">{{description.length}}/2000</text>
+      </view>
+    </view>
+
+    <view class="form-item">
+      <view class="form-label">
+        <text class="required">*</text>
+        <text>价格</text>
+      </view>
+      <view class="price-inputs">
+        <view class="price-input-wrapper">
+          <text class="price-prefix">¥</text>
+          <input class="price-input" type="digit" placeholder="0.00" value="{{price}}" bindinput="onPriceInput" />
+        </view>
+        <view class="price-divider">/</view>
+        <view class="price-input-wrapper original">
+          <text class="price-prefix">原价 ¥</text>
+          <input class="price-input" type="digit" placeholder="可选" value="{{originalPrice}}" bindinput="onOriginalPriceInput" />
+        </view>
+      </view>
+    </view>
+
+    <view class="form-item">
+      <view class="form-label">
+        <text class="required">*</text>
+        <text>成色</text>
+      </view>
+      <view class="condition-options">
+        <view class="condition-option {{condition === item ? 'active' : ''}}" wx:for="{{conditionList}}" wx:key="item" bindtap="onConditionSelect" data-value="{{item}}">{{item}}</view>
+      </view>
+    </view>
+
+    <view class="form-item">
+      <view class="form-label">
+        <text class="required">*</text>
+        <text>分类</text>
+      </view>
+      <view class="form-picker" bindtap="showCategoryPicker">
+        <text class="{{categoryId ? '' : 'placeholder'}}">{{categoryName || '请选择分类'}}</text>
+        <text class="picker-arrow">></text>
+      </view>
+    </view>
+
+    <view class="form-item">
+      <view class="form-label">
+        <text class="required">*</text>
+        <text>取货方式</text>
+      </view>
+      <view class="pickup-options">
+        <view class="pickup-option {{pickupMethod === item ? 'active' : ''}}" wx:for="{{pickupList}}" wx:key="item" bindtap="onPickupSelect" data-value="{{item}}">{{item}}</view>
+      </view>
+    </view>
+
+    <view class="form-item">
+      <view class="form-label">
+        <text>取货位置</text>
+      </view>
+      <view class="location-picker" bindtap="chooseLocation">
+        <view class="location-icon">📍</view>
+        <view class="location-info">
+          <text class="{{address ? '' : 'placeholder'}}">{{address || '点击选择位置'}}</text>
+          <text class="location-tip" wx:if="{{address}}">拖动地图可调整位置</text>
+        </view>
+        <text class="picker-arrow">></text>
+      </view>
+    </view>
+
+    <view class="form-item">
+      <view class="form-label">
+        <text>联系方式</text>
+      </view>
+      <view class="contact-inputs">
+        <view class="contact-input-wrapper">
+          <text class="contact-icon">📞</text>
+          <input class="contact-input" type="number" placeholder="联系电话（选填）" value="{{phone}}" bindinput="onPhoneInput" maxlength="11" />
+        </view>
+        <view class="contact-input-wrapper">
+          <text class="contact-icon">💬</text>
+          <input class="contact-input" placeholder="微信号（选填）" value="{{wechat}}" bindinput="onWechatInput" />
+        </view>
+      </view>
+      <view class="contact-tip">
+        <text>至少填写一种联系方式，方便买家联系您</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="category-picker-popup" wx:if="{{showCategory}}">
+    <view class="popup-mask" bindtap="hideCategoryPicker"></view>
+    <view class="popup-content">
+      <view class="popup-header">
+        <text class="popup-title">选择分类</text>
+        <text class="popup-close" bindtap="hideCategoryPicker">✕</text>
+      </view>
+      <scroll-view class="popup-scroll" scroll-y>
+        <view class="category-list">
+          <view class="category-item" wx:for="{{categories}}" wx:key="id" bindtap="onCategorySelect" data-id="{{item.id}}" data-name="{{item.name}}">
+            <text class="category-name">{{item.name}}</text>
+            <text class="category-check" wx:if="{{categoryId === item.id}}">✓</text>
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+  </view>
+
+  <view class="bottom-bar">
+    <view class="submit-btn {{canSubmit ? '' : 'disabled'}}" bindtap="submitForm">
+      <text class="btn-text">发布闲置</text>
+    </view>
+  </view>
+</view>
