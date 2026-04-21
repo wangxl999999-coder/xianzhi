@@ -21,7 +21,7 @@ const getItemList = async (req, res) => {
     }
 
     if (condition) {
-      whereClause += ' AND i.condition = ?';
+      whereClause += ' AND i.`condition` = ?';
       params.push(condition);
     }
 

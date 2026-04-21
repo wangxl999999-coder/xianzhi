@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS items (
   description TEXT COMMENT '描述',
   price DECIMAL(10, 2) NOT NULL COMMENT '价格',
   original_price DECIMAL(10, 2) COMMENT '原价',
-  condition VARCHAR(20) COMMENT '成色:全新,几乎全新,轻微使用,明显使用',
+  `condition` VARCHAR(20) COMMENT '成色:全新,几乎全新,轻微使用,明显使用',
   category_id INT COMMENT '分类ID',
   pickup_method VARCHAR(20) COMMENT '取货方式:自提,邮寄,均可',
   phone VARCHAR(20) COMMENT '联系电话',
