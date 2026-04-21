@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const multer = require('multer');
 
 const userRoutes = require('./routes/userRoutes');
 const itemRoutes = require('./routes/itemRoutes');
@@ -68,8 +69,6 @@ app.use((req, res) => {
     message: '请求的资源不存在'
   });
 });
-
-const multer = require('multer');
 
 app.listen(PORT, () => {
   console.log(`服务器运行在 http://localhost:${PORT}`);
