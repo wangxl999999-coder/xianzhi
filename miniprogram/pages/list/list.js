@@ -32,7 +32,23 @@ Page({
     this.loadItems();
   },
 
+  checkPendingCategory() {
+    const pendingCategory = app.globalData.pendingCategory;
+    if (pendingCategory) {
+      this.setData({
+        currentCategoryId: pendingCategory.id,
+        currentCategoryName: pendingCategory.name || '',
+        page: 1,
+        items: [],
+        hasMore: true
+      });
+      app.globalData.pendingCategory = null;
+      this.loadItems();
+    }
+  },
+
   onShow() {
+    this.checkPendingCategory();
     this.setData({
       page: 1,
       items: [],
@@ -164,6 +180,12 @@ Page({
   },
 
   toggleCategoryFilter() {
+    if (!this.data.showCategoryFilter) {
+      this.setData({
+        tempCategoryId: this.data.currentCategoryId,
+        tempCategoryName: this.data.currentCategoryName
+      });
+    }
     this.setData({
       showCategoryFilter: !this.data.showCategoryFilter,
       showConditionFilter: false,
@@ -195,6 +217,11 @@ Page({
   },
 
   toggleConditionFilter() {
+    if (!this.data.showConditionFilter) {
+      this.setData({
+        tempCondition: this.data.currentCondition
+      });
+    }
     this.setData({
       showConditionFilter: !this.data.showConditionFilter,
       showCategoryFilter: false,

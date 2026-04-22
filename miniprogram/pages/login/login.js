@@ -98,41 +98,6 @@ Page({
     });
   },
 
-  copyDemoAccount(e) {
-    const account = e.currentTarget.dataset.account;
-    wx.setClipboardData({
-      data: account,
-      success: () => {
-        wx.showToast({
-          title: '已复制用户名',
-          icon: 'success'
-        });
-        this.setData({
-          username: account
-        }, () => {
-          this.checkCanLogin();
-        });
-      }
-    });
-  },
-
-  copyDemoPassword() {
-    wx.setClipboardData({
-      data: '123456',
-      success: () => {
-        wx.showToast({
-          title: '已复制密码',
-          icon: 'success'
-        });
-        this.setData({
-          password: '123456'
-        }, () => {
-          this.checkCanLogin();
-        });
-      }
-    });
-  },
-
   goToHome() {
     wx.switchTab({
       url: '/pages/index/index'

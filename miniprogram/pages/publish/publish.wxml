@@ -42,18 +42,22 @@
     <view class="form-item">
       <view class="form-label">
         <text class="required">*</text>
-        <text>价格</text>
+        <text>售价</text>
       </view>
-      <view class="price-inputs">
-        <view class="price-input-wrapper">
-          <text class="price-prefix">¥</text>
-          <input class="price-input" type="digit" placeholder="0.00" value="{{price}}" bindinput="onPriceInput" />
-        </view>
-        <view class="price-divider">/</view>
-        <view class="price-input-wrapper original">
-          <text class="price-prefix">原价 ¥</text>
-          <input class="price-input" type="digit" placeholder="可选" value="{{originalPrice}}" bindinput="onOriginalPriceInput" />
-        </view>
+      <view class="price-input-wrapper">
+        <text class="price-prefix">¥</text>
+        <input class="price-input" type="digit" placeholder="0.00" value="{{price}}" bindinput="onPriceInput" />
+      </view>
+    </view>
+
+    <view class="form-item">
+      <view class="form-label">
+        <text>原价</text>
+        <text class="tip">选填</text>
+      </view>
+      <view class="price-input-wrapper original-price">
+        <text class="price-prefix">¥</text>
+        <input class="price-input" type="digit" placeholder="原价（选填）" value="{{originalPrice}}" bindinput="onOriginalPriceInput" />
       </view>
     </view>
 

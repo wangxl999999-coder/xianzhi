@@ -41,8 +41,8 @@
       </view>
       <scroll-view class="popup-scroll" scroll-y>
         <view class="category-options">
-          <view class="category-option {{!currentCategoryId ? 'active' : ''}}" bindtap="onCategorySelect" data-id="">全部</view>
-          <view class="category-option {{currentCategoryId === item.id ? 'active' : ''}}" wx:for="{{categories}}" wx:key="id" bindtap="onCategorySelect" data-id="{{item.id}}" data-name="{{item.name}}">{{item.name}}</view>
+          <view class="category-option {{tempCategoryId === '' ? 'active' : ''}}" bindtap="onCategorySelect" data-id="">全部</view>
+          <view class="category-option {{tempCategoryId === item.id ? 'active' : ''}}" wx:for="{{categories}}" wx:key="id" bindtap="onCategorySelect" data-id="{{item.id}}" data-name="{{item.name}}">{{item.name}}</view>
         </view>
       </scroll-view>
       <view class="popup-footer">
@@ -59,11 +59,11 @@
         <text class="popup-close" bindtap="toggleConditionFilter">✕</text>
       </view>
       <view class="condition-options">
-        <view class="condition-option {{!currentCondition ? 'active' : ''}}" bindtap="onConditionSelect" data-value="">全部</view>
-        <view class="condition-option {{currentCondition === '全新' ? 'active' : ''}}" bindtap="onConditionSelect" data-value="全新">全新</view>
-        <view class="condition-option {{currentCondition === '几乎全新' ? 'active' : ''}}" bindtap="onConditionSelect" data-value="几乎全新">几乎全新</view>
-        <view class="condition-option {{currentCondition === '轻微使用' ? 'active' : ''}}" bindtap="onConditionSelect" data-value="轻微使用">轻微使用</view>
-        <view class="condition-option {{currentCondition === '明显使用' ? 'active' : ''}}" bindtap="onConditionSelect" data-value="明显使用">明显使用</view>
+        <view class="condition-option {{tempCondition === '' ? 'active' : ''}}" bindtap="onConditionSelect" data-value="">全部</view>
+        <view class="condition-option {{tempCondition === '全新' ? 'active' : ''}}" bindtap="onConditionSelect" data-value="全新">全新</view>
+        <view class="condition-option {{tempCondition === '几乎全新' ? 'active' : ''}}" bindtap="onConditionSelect" data-value="几乎全新">几乎全新</view>
+        <view class="condition-option {{tempCondition === '轻微使用' ? 'active' : ''}}" bindtap="onConditionSelect" data-value="轻微使用">轻微使用</view>
+        <view class="condition-option {{tempCondition === '明显使用' ? 'active' : ''}}" bindtap="onConditionSelect" data-value="明显使用">明显使用</view>
       </view>
       <view class="popup-footer">
         <view class="popup-btn confirm" bindtap="confirmConditionFilter">确定</view>

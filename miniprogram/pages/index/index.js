@@ -122,8 +122,12 @@ Page({
 
   goToCategory(e) {
     const { id, name } = e.currentTarget.dataset;
-    wx.navigateTo({
-      url: `/pages/list/list?categoryId=${id}&categoryName=${encodeURIComponent(name)}`
+    app.globalData.pendingCategory = {
+      id: id,
+      name: name
+    };
+    wx.switchTab({
+      url: '/pages/list/list'
     });
   },
 

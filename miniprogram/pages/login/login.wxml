@@ -29,25 +29,6 @@
     </view>
   </view>
 
-  <view class="demo-section" wx:if="{{!isLoggedIn}}">
-    <view class="demo-header">
-      <text class="demo-title">测试账号</text>
-    </view>
-    <view class="demo-content">
-      <view class="demo-item">
-        <text class="demo-label">用户名：</text>
-        <text class="demo-value" bindtap="copyDemoAccount" data-account="test1">test1</text>
-      </view>
-      <view class="demo-item">
-        <text class="demo-label">密码：</text>
-        <text class="demo-value" bindtap="copyDemoPassword">123456</text>
-      </view>
-    </view>
-    <view class="demo-tip">
-      <text>点击用户名或密码可快速复制</text>
-    </view>
-  </view>
-
   <view class="logged-section" wx:if="{{isLoggedIn}}">
     <view class="logged-icon">✓</view>
     <text class="logged-text">您已登录</text>

@@ -134,11 +134,6 @@
   right: 20rpx;
 }
 
-.price-inputs {
-  display: flex;
-  align-items: center;
-}
-
 .price-input-wrapper {
   display: flex;
   align-items: center;
@@ -147,39 +142,29 @@
   padding: 20rpx;
 }
 
-.price-input-wrapper.original {
-  flex: 1;
-}
-
 .price-prefix {
-  font-size: 28rpx;
+  font-size: 32rpx;
   color: #ff6b6b;
   margin-right: 8rpx;
+  font-weight: bold;
 }
 
-.price-input-wrapper.original .price-prefix {
+.price-input-wrapper.original-price .price-prefix {
   color: #999;
-  font-size: 24rpx;
+  font-weight: normal;
 }
 
 .price-input {
-  font-size: 32rpx;
+  flex: 1;
+  font-size: 36rpx;
   font-weight: bold;
   color: #ff6b6b;
-  min-width: 120rpx;
 }
 
-.price-input-wrapper.original .price-input {
-  font-size: 28rpx;
+.price-input-wrapper.original-price .price-input {
+  font-size: 32rpx;
   font-weight: normal;
   color: #333;
-  min-width: auto;
-}
-
-.price-divider {
-  font-size: 32rpx;
-  color: #ccc;
-  margin: 0 30rpx;
 }
 
 .condition-options {
